@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      database: bikeService
+      port: 27017
+      host: localhost
+server:
+  port:
