@@ -10,6 +10,6 @@ import java.util.concurrent.ExecutionException;
 public interface RentService {
     List<Rent> findAll();
     List<Rent> findAllWithLimit(Integer count);
-
     RentResponseDTO addNewRent(RentRequestDTO rentRequestDTO) throws ExecutionException, InterruptedException;
+    RentResponseDTO findRentById(String id);
 }

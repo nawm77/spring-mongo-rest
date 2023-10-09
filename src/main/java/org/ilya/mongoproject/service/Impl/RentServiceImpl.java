@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -56,5 +58,19 @@ public class RentServiceImpl implements RentService {
                 .bike(foundBike)
                 .dateTime(rentRequestDTO.getDateTime())
                 .build();
+    }
+
+    @Override
+    public RentResponseDTO findRentById(String id) {
+        Optional<Rent> rent = rentRepository.findRentById(id);
+        if(rent.isPresent()) {
+            return RentResponseDTO.builder()
+                    .dateTime(rent.get().getDay())
+                    .bike(rent.get().getBike())
+                    .customer(rent.get().getCustomer())
+                    .build();
+        } else{
+            throw new NoSuchElementException("No such rent " + id);
+        }
     }
 }

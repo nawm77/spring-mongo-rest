@@ -45,4 +45,13 @@ public class RentController {
                     .build());
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRentById(@PathVariable(name = "id") String id){
+        try{
+            return ResponseEntity.status(HttpStatus.FOUND).body(rentService.findRentById(id));
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
+    }
 }
