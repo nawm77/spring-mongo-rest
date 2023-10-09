@@ -23,11 +23,13 @@ public class RentController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllRents(@RequestParam(name = "count", required = false) Integer count){
+    public ResponseEntity<?> getAllRents(@RequestParam(name = "page", required = false) Integer page){
         try {
-            return count == null ? ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAll()) : ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAllWithLimit(count));
+            return page == null ?
+                    ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAll())
+                    :
+                    ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAllWithLimit(page));
         } catch (Exception e){
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
     }

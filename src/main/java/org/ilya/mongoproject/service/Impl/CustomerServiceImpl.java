@@ -6,6 +6,7 @@ import org.ilya.mongoproject.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -18,7 +19,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findByEmail(String email) {
-        return customerRepository.findCustomerByEmail(email);
+    //TODO может ли сервис возвращать optional? или же ему всегда нужно возвращать конкретную сущность
+    public Customer findByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email).orElseThrow(() ->
+                new NoSuchElementException("No such customer with email " + email));
     }
 }

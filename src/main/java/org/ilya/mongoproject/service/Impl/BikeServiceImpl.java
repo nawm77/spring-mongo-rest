@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -26,7 +27,18 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public Optional<Bike> findById(String id) {
-        return bikeRepository.findBikeById(id);
+    public List<Bike> findAllWithLimit(Integer count) {
+        return findAll().stream().skip(20L * count)
+                .limit(20L)
+                .toList();
+    }
+    @Override
+    public Bike findById(String id) {
+        Optional<Bike> b = bikeRepository.findBikeById(id);
+        if(b.isPresent()){
+            return b.get();
+        } else{
+            throw new NoSuchElementException("No such bike with id " + id);
+        }
     }
 }

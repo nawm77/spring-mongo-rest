@@ -23,8 +23,6 @@ public class RentServiceImpl implements RentService {
     private final RentRepository rentRepository;
     private final BikeService bikeService;
     private final CustomerService customerService;
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
-
     @Autowired
     public RentServiceImpl(RentRepository rentRepository, BikeService bikeService, CustomerService customerService) {
         this.rentRepository = rentRepository;
@@ -40,33 +38,25 @@ public class RentServiceImpl implements RentService {
     @Override
     public List<Rent> findAllWithLimit(Integer count) {
         return findAll().stream().skip(20L * count)
-                .limit(20L * (count + 1))
+                .limit(20L)
                 .toList();
     }
 
     @Override
     public RentResponseDTO addNewRent(RentRequestDTO rentRequestDTO) {
-        CompletableFuture<Optional<Bike>> findBikeFuture = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<Bike> findBikeFuture = CompletableFuture.supplyAsync(() ->
                 bikeService.findById(rentRequestDTO.getBikeId()));
-        CompletableFuture<Optional<Customer>> findCustomerFuture = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<Customer> findCustomerFuture = CompletableFuture.supplyAsync(() ->
                 customerService.findByEmail(rentRequestDTO.getEmail()));
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(findBikeFuture, findCustomerFuture);
         combinedFuture.join();
-        Optional<Bike> foundBike = findBikeFuture.join();
-        Optional<Customer> foundCustomer = findCustomerFuture.join();
-        if (validateBikeAndCustomer(foundBike, foundCustomer)) {
-            Rent r = new Rent(rentRequestDTO.getDateTime(), foundBike.get(), foundCustomer.get());
-            CompletableFuture.runAsync(() -> rentRepository.save(r));
-            return RentResponseDTO.builder()
-                    .bike(foundBike.get())
-                    .dateTime(rentRequestDTO.getDateTime())
-                    .build();
-        } else{
-            throw new NoSuchElementException("No such bike " + rentRequestDTO.getBikeId());
-        }
-    }
-
-    private boolean validateBikeAndCustomer(Optional<Bike> bike, Optional<Customer> customer) {
-        return bike.isPresent() && customer.isPresent();
+        Bike foundBike = findBikeFuture.join();
+        Customer foundCustomer = findCustomerFuture.join();
+        Rent r = new Rent(rentRequestDTO.getDateTime(), foundBike, foundCustomer);
+        CompletableFuture.runAsync(() -> rentRepository.save(r));
+        return RentResponseDTO.builder()
+                .bike(foundBike)
+                .dateTime(rentRequestDTO.getDateTime())
+                .build();
     }
 }
