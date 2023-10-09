@@ -1,6 +1,5 @@
 package org.ilya.mongoproject.repository;
 
-import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

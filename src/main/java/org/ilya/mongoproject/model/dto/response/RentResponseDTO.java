@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ilya.mongoproject.model.entities.Bike;
+import org.ilya.mongoproject.model.entities.Customer;
 
 import java.time.LocalDateTime;
 
@@ -15,4 +16,6 @@ import java.time.LocalDateTime;
 public class RentResponseDTO {
     private LocalDateTime dateTime;
     private Bike bike;
+    private Customer customer;
+
 }

@@ -2,9 +2,7 @@ package org.ilya.mongoproject.model.entities;
 
 import lombok.Builder;
 import lombok.Data;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "bikes")
 @Data

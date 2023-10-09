@@ -2,7 +2,6 @@ package org.ilya.mongoproject.controller;
 
 import org.ilya.mongoproject.exceptionHandler.ApiException;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
-import org.ilya.mongoproject.service.BikeService;
 import org.ilya.mongoproject.service.RentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +17,9 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.RENT_API_V1_PAT
 @RequestMapping(RENT_API_V1_PATH)
 public class RentController {
     private final RentService rentService;
-    private final BikeService bikeService;
-
     @Autowired
-    public RentController(RentService rentService, BikeService bikeService) {
+    public RentController(RentService rentService) {
         this.rentService = rentService;
-        this.bikeService = bikeService;
     }
 
     @GetMapping("/")
