@@ -5,4 +5,4 @@ spring:
       port: 27017
       host: localhost
 server:
-  port:
+  port: 8080
