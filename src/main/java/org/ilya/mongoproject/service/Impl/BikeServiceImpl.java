@@ -1,5 +1,7 @@
 package org.ilya.mongoproject.service.Impl;
 
+import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.ilya.mongoproject.repository.BikeRepository;
 import org.ilya.mongoproject.service.BikeService;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class BikeServiceImpl implements BikeService {
     private final BikeRepository bikeRepository;
 

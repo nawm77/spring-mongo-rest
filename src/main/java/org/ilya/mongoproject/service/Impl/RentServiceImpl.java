@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
+import java.util.concurrent.*;
 
 @Service
 public class RentServiceImpl implements RentService {
@@ -22,6 +23,7 @@ public class RentServiceImpl implements RentService {
     private final RentRepository rentRepository;
     private final BikeService bikeService;
     private final CustomerService customerService;
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     @Autowired
     public RentServiceImpl(RentRepository rentRepository, BikeService bikeService, CustomerService customerService) {
@@ -44,21 +46,27 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public RentResponseDTO addNewRent(RentRequestDTO rentRequestDTO) {
-        if (validateRent(rentRequestDTO)) {
-            Bike b = bikeService.findById(rentRequestDTO.getBikeId()).get();
-            Customer c = customerService.findByEmail(rentRequestDTO.getEmail()).get();
-            Rent r = new Rent(rentRequestDTO.getDateTime(), b, c);
+        CompletableFuture<Optional<Bike>> findBikeFuture = CompletableFuture.supplyAsync(() ->
+                bikeService.findById(rentRequestDTO.getBikeId()));
+        CompletableFuture<Optional<Customer>> findCustomerFuture = CompletableFuture.supplyAsync(() ->
+                customerService.findByEmail(rentRequestDTO.getEmail()));
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(findBikeFuture, findCustomerFuture);
+        combinedFuture.join();
+        Optional<Bike> foundBike = findBikeFuture.join();
+        Optional<Customer> foundCustomer = findCustomerFuture.join();
+        if (validateBikeAndCustomer(foundBike, foundCustomer)) {
+            Rent r = new Rent(rentRequestDTO.getDateTime(), foundBike.get(), foundCustomer.get());
             CompletableFuture.runAsync(() -> rentRepository.save(r));
             return RentResponseDTO.builder()
-                    .bike(b)
+                    .bike(foundBike.get())
                     .dateTime(rentRequestDTO.getDateTime())
                     .build();
         } else{
-            throw new NoSuchElementException("No such bike");
+            throw new NoSuchElementException("No such bike " + rentRequestDTO.getBikeId());
         }
     }
 
-    private boolean validateRent(RentRequestDTO rentRequestDTO){
-        return bikeService.findById(rentRequestDTO.getBikeId()).isPresent() && customerService.findByEmail(rentRequestDTO.getEmail()).isPresent();
+    private boolean validateBikeAndCustomer(Optional<Bike> bike, Optional<Customer> customer) {
+        return bike.isPresent() && customer.isPresent();
     }
 }
