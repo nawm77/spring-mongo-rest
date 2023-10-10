@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-sharing-deployment
+  labels:
+    type: deployment
+    app: sharing-service
+    db: mongo
+    kind: app
+spec:
+  replicas: 2
+  minReadySeconds: 20
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: sharing
+      type: container
+  template:
+    metadata:
+      labels:
+        app: sharing
+        type: container
+    spec:
+      containers:
+        - name: sharing-service
+          image: bike-sharing-mongo:0.0.1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: sharing-port

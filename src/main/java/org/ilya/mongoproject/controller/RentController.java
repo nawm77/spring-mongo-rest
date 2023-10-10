@@ -54,4 +54,23 @@ public class RentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
         }
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> editExistingRent(@RequestBody RentRequestDTO rentRequestDTO){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(rentService.editExistingRent(rentRequestDTO));
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteRentById(@PathVariable("id") String id){
+        try{
+            rentService.deleteRentById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
+    }
 }

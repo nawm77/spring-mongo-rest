@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface RentRepository extends MongoRepository<Rent, String> {
-    List<Rent> findAll();
     Optional<Rent> findRentById(String id);
 }

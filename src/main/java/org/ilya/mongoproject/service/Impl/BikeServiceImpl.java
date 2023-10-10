@@ -83,6 +83,15 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
+    public void deleteExistingBike(String id) {
+        try{
+            bikeRepository.deleteById(id);
+        } catch (Exception e){
+            throw new NoSuchElementException("No such bike with id " + id);
+        }
+    }
+
+    @Override
     public Bike findById(String id) {
         Optional<Bike> b = bikeRepository.findBikeById(id);
         if(b.isPresent()){

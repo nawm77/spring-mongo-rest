@@ -13,4 +13,5 @@ public interface BikeService {
     BikeResponseDTO addNewBike(BikeRequestDTO bike);
 
     BikeResponseDTO editExistingBike(BikeRequestDTO bikeRequestDTO);
+    void deleteExistingBike(String id);
 }

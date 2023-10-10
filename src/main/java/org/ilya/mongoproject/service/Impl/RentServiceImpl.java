@@ -1,5 +1,6 @@
 package org.ilya.mongoproject.service.Impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
 import org.ilya.mongoproject.model.dto.response.RentResponseDTO;
 import org.ilya.mongoproject.model.entities.Bike;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class RentServiceImpl implements RentService {
 
     private final RentRepository rentRepository;
@@ -61,16 +63,43 @@ public class RentServiceImpl implements RentService {
     }
 
     @Override
-    public RentResponseDTO findRentById(String id) {
+    public Rent findRentById(String id) {
         Optional<Rent> rent = rentRepository.findRentById(id);
         if(rent.isPresent()) {
-            return RentResponseDTO.builder()
-                    .dateTime(rent.get().getDay())
-                    .bike(rent.get().getBike())
-                    .customer(rent.get().getCustomer())
-                    .build();
+            return rent.get();
         } else{
             throw new NoSuchElementException("No such rent " + id);
+        }
+    }
+
+    @Override
+    public RentResponseDTO editExistingRent(RentRequestDTO rentRequestDTO) {
+        Rent existingRent = findRentById(rentRequestDTO.getId());
+        CompletableFuture.runAsync(() ->{
+            if (rentRequestDTO.getDateTime() != null){
+                existingRent.setDay(rentRequestDTO.getDateTime());
+            }
+            if (rentRequestDTO.getBikeId() != null){
+                existingRent.setBike(bikeService.findById(rentRequestDTO.getBikeId()));
+            }
+            if (rentRequestDTO.getEmail() != null){
+                existingRent.setCustomer(customerService.findByEmail(rentRequestDTO.getEmail()));
+            }
+        });
+        log.info("Successfully edited rent" + rentRequestDTO);
+        return RentResponseDTO.builder()
+                .dateTime(existingRent.getDay())
+                .customer(existingRent.getCustomer())
+                .bike(existingRent.getBike())
+                .build();
+    }
+
+    @Override
+    public void deleteRentById(String id) {
+        try{
+            rentRepository.deleteById(id);
+        } catch (Exception e){
+            throw new NoSuchElementException("No such rent with id " + id);
         }
     }
 }

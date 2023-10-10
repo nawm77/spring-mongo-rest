@@ -56,4 +56,14 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteBikeById(@PathVariable("id") String id){
+        try{
+            bikeService.deleteExistingBike(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+        }
+    }
 }
