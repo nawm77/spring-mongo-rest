@@ -13,6 +13,6 @@ spec:
     type: container
   ports:
     - port: 27017
-      targetPort: 27017
+      targetPort: mongo-port
       protocol: TCP
       name: mongo-service-port
