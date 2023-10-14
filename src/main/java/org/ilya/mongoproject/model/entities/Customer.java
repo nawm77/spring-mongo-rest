@@ -19,15 +19,4 @@ public class Customer {
     private String name;
     private String phoneNumber;
     private String surname;
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
-    }
 }

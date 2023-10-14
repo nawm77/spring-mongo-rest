@@ -29,14 +29,4 @@ public class Rent {
         this.bike = bike;
         this.customer = customer;
     }
-
-    @Override
-    public String toString() {
-        return "Rent{" +
-                "id='" + id + '\'' +
-                ", day=" + day +
-                ", bike=" + bike +
-                ", customer=" + customer +
-                '}';
-    }
 }

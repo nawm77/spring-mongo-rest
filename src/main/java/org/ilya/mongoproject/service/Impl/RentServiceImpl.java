@@ -45,7 +45,7 @@ public class RentServiceImpl implements RentService {
     }
 
     @Override
-    public RentResponseDTO addNewRent(RentRequestDTO rentRequestDTO) {
+    public Rent addNewRent(RentRequestDTO rentRequestDTO) {
         CompletableFuture<Bike> findBikeFuture = CompletableFuture.supplyAsync(() ->
                 bikeService.findById(rentRequestDTO.getBikeId()));
         CompletableFuture<Customer> findCustomerFuture = CompletableFuture.supplyAsync(() ->
@@ -56,10 +56,7 @@ public class RentServiceImpl implements RentService {
         Customer foundCustomer = findCustomerFuture.join();
         Rent r = new Rent(rentRequestDTO.getDateTime(), foundBike, foundCustomer);
         CompletableFuture.runAsync(() -> rentRepository.save(r));
-        return RentResponseDTO.builder()
-                .bike(foundBike)
-                .dateTime(rentRequestDTO.getDateTime())
-                .build();
+        return r;
     }
 
     @Override
@@ -73,7 +70,7 @@ public class RentServiceImpl implements RentService {
     }
 
     @Override
-    public RentResponseDTO editExistingRent(RentRequestDTO rentRequestDTO) {
+    public Rent editExistingRent(RentRequestDTO rentRequestDTO) {
         Rent existingRent = findRentById(rentRequestDTO.getId());
         CompletableFuture.runAsync(() ->{
             if (rentRequestDTO.getDateTime() != null){
@@ -87,11 +84,7 @@ public class RentServiceImpl implements RentService {
             }
         });
         log.info("Successfully edited rent" + rentRequestDTO);
-        return RentResponseDTO.builder()
-                .dateTime(existingRent.getDay())
-                .customer(existingRent.getCustomer())
-                .bike(existingRent.getBike())
-                .build();
+        return existingRent;
     }
 
     @Override

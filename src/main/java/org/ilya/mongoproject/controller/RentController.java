@@ -1,6 +1,7 @@
 package org.ilya.mongoproject.controller;
 
 import org.ilya.mongoproject.exceptionHandler.ApiException;
+import org.ilya.mongoproject.mapper.RentMapper;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
 import org.ilya.mongoproject.service.RentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,28 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.RENT_API_V1_PAT
 @RequestMapping(RENT_API_V1_PATH)
 public class RentController {
     private final RentService rentService;
+    private final RentMapper rentMapper;
     @Autowired
-    public RentController(RentService rentService) {
+    public RentController(RentService rentService, RentMapper rentMapper) {
         this.rentService = rentService;
+        this.rentMapper = rentMapper;
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getAllRents(@RequestParam(name = "page", required = false) Integer page){
         try {
             return page == null ?
-                    ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAll())
+                    ResponseEntity.status(HttpStatus.FOUND).body(
+                            rentService.findAll().stream()
+                            .map(rentMapper::toDTO)
+                            .toList()
+                    )
                     :
-                    ResponseEntity.status(HttpStatus.FOUND).body(rentService.findAllWithLimit(page));
+                    ResponseEntity.status(HttpStatus.FOUND).body(
+                            rentService.findAllWithLimit(page).stream()
+                            .map(rentMapper::toDTO)
+                            .toList()
+                    );
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
@@ -37,7 +48,9 @@ public class RentController {
     @PostMapping("/new")
     public ResponseEntity<?> addNewRent(@RequestBody RentRequestDTO rentRequestDTO) throws ExecutionException, InterruptedException {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(rentService.addNewRent(rentRequestDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    rentMapper.toDTO(rentService.addNewRent(rentRequestDTO))
+            );
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
                     .message(e.getMessage())
@@ -49,7 +62,9 @@ public class RentController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getRentById(@PathVariable(name = "id") String id){
         try{
-            return ResponseEntity.status(HttpStatus.FOUND).body(rentService.findRentById(id));
+            return ResponseEntity.status(HttpStatus.FOUND).body(
+                    rentMapper.toDTO(rentService.findRentById(id))
+            );
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
         }
@@ -58,7 +73,9 @@ public class RentController {
     @PutMapping("/edit")
     public ResponseEntity<?> editExistingRent(@RequestBody RentRequestDTO rentRequestDTO){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(rentService.editExistingRent(rentRequestDTO));
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    rentMapper.toDTO(rentService.editExistingRent(rentRequestDTO))
+            );
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
         }

@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BikeResponseDTO {
+public class CustomerResponseDTO {
     private String id;
+    private String email;
     private String name;
-    private String owner;
-    private String type;
-    private Integer pricePerHour;
+    private String phoneNumber;
+    private String surname;
 }

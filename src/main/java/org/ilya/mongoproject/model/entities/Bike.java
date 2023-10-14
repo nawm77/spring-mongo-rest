@@ -19,14 +19,4 @@ public class Bike {
     @Indexed
     private Integer pricePerHour;
     private String owner;
-    @Override
-    public String toString() {
-        return "Bike{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", pricePerHour=" + pricePerHour +
-                ", owner='" + owner + '\'' +
-                '}';
-    }
 }

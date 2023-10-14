@@ -10,8 +10,8 @@ public interface BikeService {
     List<Bike> findAll();
     Bike findById(String id);
     List<Bike> findAllWithLimit(Integer count);
-    BikeResponseDTO addNewBike(BikeRequestDTO bike);
+    Bike addNewBike(BikeRequestDTO bike);
 
-    BikeResponseDTO editExistingBike(BikeRequestDTO bikeRequestDTO);
+    Bike editExistingBike(BikeRequestDTO bikeRequestDTO);
     void deleteExistingBike(String id);
 }

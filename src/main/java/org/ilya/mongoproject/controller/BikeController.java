@@ -23,7 +23,8 @@ public class BikeController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllBikes(@RequestParam(name = "page", required = false) Integer page){
+    public ResponseEntity<?> getAllBikes(@RequestParam(name = "page", required = false) Integer page,
+                                         @RequestParam(name = "name", required = false) String name){
         try{
             return page == null ?
                     ResponseEntity.status(HttpStatus.FOUND).body(bikeService.findAll())

@@ -37,49 +37,39 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public BikeResponseDTO addNewBike(BikeRequestDTO bikeDTO) {
-        CompletableFuture.runAsync(() -> {
-            Bike b = Bike.builder()
-                    .owner(bikeDTO.getOwner())
-                    .name(bikeDTO.getName())
-                    .type(bikeDTO.getType())
-                    .pricePerHour(bikeDTO.getPricePerHour())
-                    .build();
-            log.info("Successfully saved bike " + bikeRepository.save(b));
-        });
-        return BikeResponseDTO.builder()
+    public Bike addNewBike(BikeRequestDTO bikeDTO) {
+        Bike b = Bike.builder()
                 .owner(bikeDTO.getOwner())
                 .name(bikeDTO.getName())
                 .type(bikeDTO.getType())
                 .pricePerHour(bikeDTO.getPricePerHour())
                 .build();
+        CompletableFuture.runAsync(() -> {
+            log.info("Successfully saved bike " + bikeRepository.save(b));
+        });
+        return b;
     }
 
     @Override
-    public BikeResponseDTO editExistingBike(BikeRequestDTO bikeRequestDTO) {
+    public Bike editExistingBike(BikeRequestDTO bikeRequestDTO) {
         Bike existingBike = findById(bikeRequestDTO.getId());
+        if (bikeRequestDTO.getName() != null) {
+            existingBike.setName(bikeRequestDTO.getName());
+        }
+        if (bikeRequestDTO.getType() != null) {
+            existingBike.setType(bikeRequestDTO.getType());
+        }
+        if (bikeRequestDTO.getPricePerHour() != null) {
+            existingBike.setPricePerHour(bikeRequestDTO.getPricePerHour());
+        }
+        if (bikeRequestDTO.getOwner() != null) {
+            existingBike.setOwner(bikeRequestDTO.getOwner());
+        }
         CompletableFuture.runAsync(() -> {
-            if (bikeRequestDTO.getName() != null) {
-                existingBike.setName(bikeRequestDTO.getName());
-            }
-            if (bikeRequestDTO.getType() != null) {
-                existingBike.setType(bikeRequestDTO.getType());
-            }
-            if (bikeRequestDTO.getPricePerHour() != null) {
-                existingBike.setPricePerHour(bikeRequestDTO.getPricePerHour());
-            }
-            if (bikeRequestDTO.getOwner() != null) {
-                existingBike.setOwner(bikeRequestDTO.getOwner());
-            }
             bikeRepository.save(existingBike);
         });
         log.info("Successfully updated bike " + existingBike);
-        return BikeResponseDTO.builder()
-                .name(existingBike.getName())
-                .owner(existingBike.getOwner())
-                .type(existingBike.getType())
-                .pricePerHour(existingBike.getPricePerHour())
-                .build();
+        return existingBike;
     }
 
     @Override
