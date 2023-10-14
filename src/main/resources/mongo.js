@@ -30,7 +30,6 @@ db.bikes.insertMany(
         type: ["MTB", "Downhill", "Freeride", "Gravel"][index % 4],
         pricePerHour: (index % 20) + 21,
         owner: [ "John", "Mike", "Tom", "Jack", "Thomas", "Jonny", "martin",][index % 7],
-        index: index
     }))
 );
 
@@ -40,7 +39,6 @@ db.users.insertMany(
         surname: ["Smith", "Johnson", "Brown", "Wilson", "Lee", "Davis", "Evans"][Math.floor(Math.random() * 7)],
         phonenumber: ["555-1234", "555-5678", "555-9876", "555-4321", "555-8765"][Math.floor(Math.random() * 5)],
         email: `email${index}@${["example.com", "gmail.com", "yahoo.com", "hotmail.com"][Math.floor(Math.random() * 4)]}`,
-        index: index
     }))
 );
 
@@ -49,7 +47,6 @@ db.rents.insertMany(
         day: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][index % 7],
         bike: db.bikes.find({}, {}).limit(20).toArray()[index % 20],
         customer: db.users.find({}, {}).limit(20).toArray()[index % 20],
-        index: index
     }))
 );
 

@@ -37,21 +37,21 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public BikeResponseDTO addNewBike(BikeRequestDTO bike) {
+    public BikeResponseDTO addNewBike(BikeRequestDTO bikeDTO) {
         CompletableFuture.runAsync(() -> {
             Bike b = Bike.builder()
-                    .owner(bike.getOwner())
-                    .name(bike.getName())
-                    .type(bike.getType())
-                    .pricePerHour(bike.getPricePerHour())
+                    .owner(bikeDTO.getOwner())
+                    .name(bikeDTO.getName())
+                    .type(bikeDTO.getType())
+                    .pricePerHour(bikeDTO.getPricePerHour())
                     .build();
             log.info("Successfully saved bike " + bikeRepository.save(b));
         });
         return BikeResponseDTO.builder()
-                .owner(bike.getOwner())
-                .name(bike.getName())
-                .type(bike.getType())
-                .pricePerHour(bike.getPricePerHour())
+                .owner(bikeDTO.getOwner())
+                .name(bikeDTO.getName())
+                .type(bikeDTO.getType())
+                .pricePerHour(bikeDTO.getPricePerHour())
                 .build();
     }
 

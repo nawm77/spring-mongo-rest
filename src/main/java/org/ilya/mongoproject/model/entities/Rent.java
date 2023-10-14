@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -14,10 +16,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Rent {
+    @Id
     private String id;
+    @Indexed
     private LocalDateTime day;
     private Bike bike;
+    @Indexed
     private Customer customer;
+
     public Rent(LocalDateTime day, Bike bike, Customer customer) {
         this.day = day;
         this.bike = bike;
@@ -28,13 +34,9 @@ public class Rent {
     public String toString() {
         return "Rent{" +
                 "id='" + id + '\'' +
-                ", day='" + day + '\'' +
-                ", bike=" + bike.getName() +
-                ", type=" + bike.getType() +
-                //TODO сделать tostring у байка и у кастомера
-                ", owner=" + bike.getOwner() +
-                ", price=" + bike.getPricePerHour() +
-                ", customer email=" + customer.getEmail() +
+                ", day=" + day +
+                ", bike=" + bike +
+                ", customer=" + customer +
                 '}';
     }
 }
