@@ -2,7 +2,6 @@ package org.ilya.mongoproject.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
-import org.ilya.mongoproject.model.dto.response.RentResponseDTO;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.ilya.mongoproject.model.entities.Customer;
 import org.ilya.mongoproject.model.entities.Rent;

@@ -2,7 +2,6 @@ package org.ilya.mongoproject.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
-import org.ilya.mongoproject.model.dto.response.BikeResponseDTO;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.ilya.mongoproject.repository.BikeRepository;
 import org.ilya.mongoproject.service.BikeService;
@@ -44,9 +43,7 @@ public class BikeServiceImpl implements BikeService {
                 .type(bikeDTO.getType())
                 .pricePerHour(bikeDTO.getPricePerHour())
                 .build();
-        CompletableFuture.runAsync(() -> {
-            log.info("Successfully saved bike " + bikeRepository.save(b));
-        });
+        CompletableFuture.runAsync(() -> log.info("Successfully saved bike " + bikeRepository.save(b)));
         return b;
     }
 
@@ -65,9 +62,7 @@ public class BikeServiceImpl implements BikeService {
         if (bikeRequestDTO.getOwner() != null) {
             existingBike.setOwner(bikeRequestDTO.getOwner());
         }
-        CompletableFuture.runAsync(() -> {
-            bikeRepository.save(existingBike);
-        });
+        CompletableFuture.runAsync(() -> bikeRepository.save(existingBike));
         log.info("Successfully updated bike " + existingBike);
         return existingBike;
     }

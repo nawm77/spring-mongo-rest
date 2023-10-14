@@ -1,7 +1,6 @@
 package org.ilya.mongoproject.service;
 
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
-import org.ilya.mongoproject.model.dto.response.BikeResponseDTO;
 import org.ilya.mongoproject.model.entities.Bike;
 
 import java.util.List;

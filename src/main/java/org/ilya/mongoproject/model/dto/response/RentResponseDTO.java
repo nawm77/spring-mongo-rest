@@ -3,7 +3,6 @@ package org.ilya.mongoproject.model.dto.response;
 import lombok.Builder;
 import lombok.Data;
 import org.ilya.mongoproject.model.entities.Bike;
-import org.ilya.mongoproject.model.entities.Customer;
 
 import java.time.LocalDateTime;
 
