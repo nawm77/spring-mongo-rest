@@ -41,7 +41,11 @@ public class RentController {
                             .toList()
                     );
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build()
+            );
         }
     }
 
@@ -55,7 +59,8 @@ public class RentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
                     .message(e.getMessage())
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build());
+                    .build()
+            );
         }
     }
 
@@ -66,7 +71,12 @@ public class RentController {
                     rentMapper.toDTO(rentService.findRentById(id))
             );
         } catch (NoSuchElementException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    ApiException.builder()
+                            .message(e.getMessage())
+                            .httpStatus(HttpStatus.NOT_FOUND)
+                            .build()
+            );
         }
     }
 
@@ -77,7 +87,12 @@ public class RentController {
                     rentMapper.toDTO(rentService.editExistingRent(rentRequestDTO))
             );
         } catch (NoSuchElementException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    ApiException.builder()
+                            .message(e.getMessage())
+                            .httpStatus(HttpStatus.NOT_FOUND)
+                            .build()
+            );
         }
     }
 
@@ -87,7 +102,12 @@ public class RentController {
             rentService.deleteRentById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiException(e.getMessage(), HttpStatus.NOT_FOUND));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    ApiException.builder()
+                            .message(e.getMessage())
+                            .httpStatus(HttpStatus.NOT_FOUND)
+                            .build()
+            );
         }
     }
 }

@@ -37,6 +37,7 @@ public class BikeServiceImpl implements BikeService {
 
     @Override
     public Bike addNewBike(BikeRequestDTO bikeDTO) {
+        //todo check existing bikes
         Bike b = Bike.builder()
                 .owner(bikeDTO.getOwner())
                 .name(bikeDTO.getName())
