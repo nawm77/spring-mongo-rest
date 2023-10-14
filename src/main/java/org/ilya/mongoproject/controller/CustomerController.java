@@ -1,5 +1,6 @@
 package org.ilya.mongoproject.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.exceptionHandler.ApiException;
 import org.ilya.mongoproject.mapper.CustomerMapper;
 import org.ilya.mongoproject.model.dto.request.CustomerRequestDTO;
@@ -15,6 +16,7 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.CUSTOMER_API_V1
 
 @RestController
 @RequestMapping(CUSTOMER_API_V1_PATH)
+@Slf4j
 public class CustomerController {
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
@@ -41,6 +43,7 @@ public class CustomerController {
                                     .toList()
                     );
         } catch (Exception e) {
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
@@ -56,7 +59,8 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.FOUND).body(
                     customerMapper.toDTO(customerService.findById(id))
             );
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())
@@ -79,6 +83,7 @@ public class CustomerController {
                     customerMapper.toDTO(customerService.editExistingCustomer(customerMapper.toCustomer(customerRequestDTO)))
             );
         } catch (NoSuchElementException e) {
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())

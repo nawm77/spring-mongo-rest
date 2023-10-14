@@ -1,5 +1,6 @@
 package org.ilya.mongoproject.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.exceptionHandler.ApiException;
 import org.ilya.mongoproject.mapper.RentMapper;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
@@ -16,6 +17,7 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.RENT_API_V1_PAT
 
 @RestController
 @RequestMapping(RENT_API_V1_PATH)
+@Slf4j
 public class RentController {
     private final RentService rentService;
     private final RentMapper rentMapper;
@@ -41,6 +43,7 @@ public class RentController {
                             .toList()
                     );
         } catch (Exception e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .message(e.getLocalizedMessage())
@@ -56,6 +59,7 @@ public class RentController {
                     rentMapper.toDTO(rentService.addNewRent(rentRequestDTO))
             );
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
                     .message(e.getLocalizedMessage())
                     .httpStatus(HttpStatus.BAD_REQUEST)
@@ -71,6 +75,7 @@ public class RentController {
                     rentMapper.toDTO(rentService.findRentById(id))
             );
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())
@@ -87,6 +92,7 @@ public class RentController {
                     rentMapper.toDTO(rentService.editExistingRent(rentRequestDTO))
             );
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())
@@ -102,6 +108,7 @@ public class RentController {
             rentService.deleteRentById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())

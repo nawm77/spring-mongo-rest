@@ -1,5 +1,6 @@
 package org.ilya.mongoproject.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ilya.mongoproject.exceptionHandler.ApiException;
 import org.ilya.mongoproject.mapper.BikeMapper;
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
@@ -16,6 +17,7 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.BIKE_API_V1_PAT
 
 @RestController
 @RequestMapping(BIKE_API_V1_PATH)
+@Slf4j
 public class BikeController {
     private final BikeService bikeService;
     private final BikeMapper bikeMapper;
@@ -40,6 +42,7 @@ public class BikeController {
                                     .map(bikeMapper::toDTO)
                                     .toList());
         } catch (Exception e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
                             .message(e.getLocalizedMessage())
@@ -56,6 +59,7 @@ public class BikeController {
                     bikeService.findById(id)
             );
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.NOT_FOUND)
@@ -80,6 +84,7 @@ public class BikeController {
                     bikeService.editExistingBike(bikeMapper.toBike(bikeRequestDTO))
             );
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.NOT_FOUND)
@@ -95,6 +100,7 @@ public class BikeController {
             bikeService.deleteExistingBikeById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
@@ -115,6 +121,7 @@ public class BikeController {
                     ResponseEntity.status(HttpStatus.FOUND).body(
                             bikeService.findBikeByPriceLimitAndSortDesc(startPrice, endPrice));
         } catch (FilterArgsException e){
+            log.warn("Exception: " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
