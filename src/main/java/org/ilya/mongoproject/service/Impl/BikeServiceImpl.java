@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -49,27 +48,29 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public Bike editExistingBike(BikeRequestDTO bikeRequestDTO) {
-        Bike existingBike = findById(bikeRequestDTO.getId());
-        if (bikeRequestDTO.getName() != null) {
-            existingBike.setName(bikeRequestDTO.getName());
+    public Bike editExistingBike(Bike bike) {
+        Bike existingBike = findById(bike.getId());
+        if (bike.getName() != null) {
+            existingBike.setName(bike.getName());
         }
-        if (bikeRequestDTO.getType() != null) {
-            existingBike.setType(bikeRequestDTO.getType());
+        if (bike.getType() != null) {
+            existingBike.setType(bike.getType());
         }
-        if (bikeRequestDTO.getPricePerHour() != null) {
-            existingBike.setPricePerHour(bikeRequestDTO.getPricePerHour());
+        if (bike.getPricePerHour() != null) {
+            existingBike.setPricePerHour(bike.getPricePerHour());
         }
-        if (bikeRequestDTO.getOwner() != null) {
-            existingBike.setOwner(bikeRequestDTO.getOwner());
+        if (bike.getOwner() != null) {
+            existingBike.setOwner(bike.getOwner());
         }
-        CompletableFuture.runAsync(() -> bikeRepository.save(existingBike));
-        log.info("Successfully updated bike " + existingBike);
+        CompletableFuture.runAsync(() -> {
+            bikeRepository.save(existingBike);
+            log.info("Successfully updated bike " + existingBike);
+        });
         return existingBike;
     }
 
     @Override
-    public void deleteExistingBike(String id) {
+    public void deleteExistingBikeById(String id) {
         try{
             bikeRepository.deleteById(id);
         } catch (Exception e){
@@ -79,12 +80,8 @@ public class BikeServiceImpl implements BikeService {
 
     @Override
     public Bike findById(String id) {
-        Optional<Bike> b = bikeRepository.findBikeById(id);
-        if(b.isPresent()){
-            return b.get();
-        } else{
-            log.info("No such bike with id " + id);
-            throw new NoSuchElementException("No such bike with id " + id);
-        }
+        return bikeRepository.findBikeById(id).orElseThrow(
+                () -> new NoSuchElementException("No such bike with id " + id)
+        );
     }
 }

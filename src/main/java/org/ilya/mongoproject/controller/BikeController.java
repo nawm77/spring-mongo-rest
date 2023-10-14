@@ -78,7 +78,7 @@ public class BikeController {
     public ResponseEntity<?> editExistingBike(@RequestBody BikeRequestDTO bikeRequestDTO){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(
-                    bikeService.editExistingBike(bikeRequestDTO)
+                    bikeService.editExistingBike(bikeMapper.toBike(bikeRequestDTO))
             );
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -93,7 +93,7 @@ public class BikeController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteBikeById(@PathVariable("id") String id){
         try{
-            bikeService.deleteExistingBike(id);
+            bikeService.deleteExistingBikeById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

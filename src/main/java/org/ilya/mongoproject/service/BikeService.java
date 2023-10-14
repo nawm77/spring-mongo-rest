@@ -11,6 +11,6 @@ public interface BikeService {
     List<Bike> findAllWithLimit(Integer count);
     Bike addNewBike(BikeRequestDTO bike);
 
-    Bike editExistingBike(BikeRequestDTO bikeRequestDTO);
-    void deleteExistingBike(String id);
+    Bike editExistingBike(Bike bike);
+    void deleteExistingBikeById(String id);
 }
