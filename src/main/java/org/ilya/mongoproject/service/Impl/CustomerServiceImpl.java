@@ -23,7 +23,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    //TODO может ли сервис возвращать optional? или же ему всегда нужно возвращать конкретную сущность
     public Customer findByEmail(String email) {
         return customerRepository.findCustomerByEmail(email).orElseThrow(() ->
                 new NoSuchElementException("No such customer with email " + email));
