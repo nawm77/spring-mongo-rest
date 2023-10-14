@@ -71,17 +71,15 @@ public class RentServiceImpl implements RentService {
     @Override
     public Rent editExistingRent(RentRequestDTO rentRequestDTO) {
         Rent existingRent = findRentById(rentRequestDTO.getId());
-        CompletableFuture.runAsync(() ->{
-            if (rentRequestDTO.getDateTime() != null){
-                existingRent.setDay(rentRequestDTO.getDateTime());
-            }
-            if (rentRequestDTO.getBikeId() != null){
-                existingRent.setBike(bikeService.findById(rentRequestDTO.getBikeId()));
-            }
-            if (rentRequestDTO.getEmail() != null){
-                existingRent.setCustomer(customerService.findByEmail(rentRequestDTO.getEmail()));
-            }
-        });
+        if (rentRequestDTO.getDateTime() != null){
+            existingRent.setDay(rentRequestDTO.getDateTime());
+        }
+        if (rentRequestDTO.getBikeId() != null){
+            existingRent.setBike(bikeService.findById(rentRequestDTO.getBikeId()));
+        }
+        if (rentRequestDTO.getEmail() != null){
+            existingRent.setCustomer(customerService.findByEmail(rentRequestDTO.getEmail()));
+        }
         log.info("Successfully edited rent" + rentRequestDTO);
         return existingRent;
     }

@@ -43,7 +43,7 @@ public class RentController {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message(e.getMessage())
+                    .message(e.getLocalizedMessage())
                     .build()
             );
         }
@@ -57,7 +57,7 @@ public class RentController {
             );
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiException.builder()
-                    .message(e.getMessage())
+                    .message(e.getLocalizedMessage())
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build()
             );
@@ -73,7 +73,7 @@ public class RentController {
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
                             .build()
             );
@@ -89,7 +89,7 @@ public class RentController {
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
                             .build()
             );
@@ -104,7 +104,7 @@ public class RentController {
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
                             .build()
             );

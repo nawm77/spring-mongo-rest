@@ -2,7 +2,6 @@ package org.ilya.mongoproject.model.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
-import org.ilya.mongoproject.model.entities.Bike;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 public class RentResponseDTO {
     private String id;
     private LocalDateTime dateTime;
-    private Bike bike;
-    private CustomerResponseDTO customerResponseDTO;
+    private BikeResponseDTO bike;
+    private CustomerResponseDTO customer;
 
 }

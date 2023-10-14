@@ -43,7 +43,8 @@ public class BikeServiceImpl implements BikeService {
                 .type(bikeDTO.getType())
                 .pricePerHour(bikeDTO.getPricePerHour())
                 .build();
-        CompletableFuture.runAsync(() -> log.info("Successfully saved bike " + bikeRepository.save(b)));
+        //могу ли я создавать objectid еще до сохранения в монго?
+        log.info("Successfully saved bike " + bikeRepository.save(b));
         return b;
     }
 

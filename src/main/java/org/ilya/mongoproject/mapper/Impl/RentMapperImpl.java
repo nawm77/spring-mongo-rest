@@ -1,5 +1,6 @@
 package org.ilya.mongoproject.mapper.Impl;
 
+import org.ilya.mongoproject.mapper.BikeMapper;
 import org.ilya.mongoproject.mapper.CustomerMapper;
 import org.ilya.mongoproject.mapper.RentMapper;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
@@ -15,20 +16,22 @@ public class RentMapperImpl implements RentMapper {
     private final CustomerMapper customerMapper;
     private final CustomerService customerService;
     private final BikeService bikeService;
+    private final BikeMapper bikeMapper;
 
     @Autowired
-    public RentMapperImpl(CustomerMapper customerMapper, CustomerService customerService, BikeService bikeService) {
+    public RentMapperImpl(CustomerMapper customerMapper, CustomerService customerService, BikeService bikeService, BikeMapper bikeMapper) {
         this.customerMapper = customerMapper;
         this.customerService = customerService;
         this.bikeService = bikeService;
+        this.bikeMapper = bikeMapper;
     }
 
     public RentResponseDTO toDTO(Rent rent){
         return RentResponseDTO.builder()
                 .id(rent.getId())
-                .bike(rent.getBike())
+                .bike(bikeMapper.toDTO(rent.getBike()))
                 .dateTime(rent.getDay())
-                .customerResponseDTO(customerMapper.toDTO(rent.getCustomer()))
+                .customer(customerMapper.toDTO(rent.getCustomer()))
                 .build();
     }
 

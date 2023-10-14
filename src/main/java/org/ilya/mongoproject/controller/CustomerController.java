@@ -44,7 +44,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.BAD_REQUEST)
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .build()
             );
         }
@@ -59,7 +59,7 @@ public class CustomerController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
             );
         }
@@ -81,7 +81,7 @@ public class CustomerController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
             );
         }
@@ -95,7 +95,7 @@ public class CustomerController {
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.NOT_FOUND)
             );
         }

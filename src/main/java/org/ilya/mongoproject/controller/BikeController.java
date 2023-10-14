@@ -43,7 +43,7 @@ public class BikeController {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .httpStatus(HttpStatus.BAD_REQUEST)
                             .build()
             );
@@ -60,7 +60,7 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.NOT_FOUND)
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .build()
             );
         }
@@ -84,7 +84,7 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                             .httpStatus(HttpStatus.NOT_FOUND)
-                            .message(e.getMessage())
+                            .message(e.getLocalizedMessage())
                             .build()
             );
         }
@@ -99,7 +99,7 @@ public class BikeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     ApiException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .message(e.getMessage())
+                    .message(e.getLocalizedMessage())
                     .build()
             );
         }
