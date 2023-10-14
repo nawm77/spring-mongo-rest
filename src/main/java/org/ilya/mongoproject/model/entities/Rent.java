@@ -23,10 +23,4 @@ public class Rent {
     private Bike bike;
     @Indexed
     private Customer customer;
-
-    public Rent(LocalDateTime day, Bike bike, Customer customer) {
-        this.day = day;
-        this.bike = bike;
-        this.customer = customer;
-    }
 }
