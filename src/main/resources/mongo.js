@@ -78,3 +78,14 @@ db.bikes.aggregate([
         }
     }
 ])
+
+
+// day in localdatetime
+db.rents.insertMany(
+    Array.from({ length: 10000 }).map((_, index) => ({
+        day: new Date(),
+        bike: db.bikes.find({}, {}).limit(20).toArray()[index % 20],
+        customer: db.users.find({}, {}).limit(20).toArray()[index % 20],
+        index: index
+    }))
+);
