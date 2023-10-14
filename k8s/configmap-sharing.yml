@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmapSharing
+  name: configmap-sharing
   labels:
     type: configmap
     app: sharing-service
