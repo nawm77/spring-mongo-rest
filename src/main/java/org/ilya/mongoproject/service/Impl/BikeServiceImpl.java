@@ -4,9 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
 import org.ilya.mongoproject.model.entities.Bike;
+import org.ilya.mongoproject.model.exception.FilterArgsException;
 import org.ilya.mongoproject.repository.BikeRepository;
 import org.ilya.mongoproject.service.BikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +24,12 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class BikeServiceImpl implements BikeService {
     private final BikeRepository bikeRepository;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public BikeServiceImpl(BikeRepository bikeRepository) {
+    public BikeServiceImpl(BikeRepository bikeRepository, MongoTemplate mongoTemplate) {
         this.bikeRepository = bikeRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -78,6 +87,19 @@ public class BikeServiceImpl implements BikeService {
         } catch (Exception e){
             throw new NoSuchElementException("No such bike with id " + id);
         }
+    }
+
+    @Override
+    public List<Bike> findBikeByPriceLimitAndSortDesc(Integer startPrice, Integer endPrice) throws FilterArgsException {
+        if(startPrice>endPrice) throw new FilterArgsException("Start price : " + startPrice + " must be lower than end price: " + endPrice);
+        AggregationOperation match = Aggregation.match(
+                Criteria.where("type").is("MTB")
+                        .and("pricePerHour").gte(startPrice).lte(endPrice)
+        );
+        AggregationOperation sort = Aggregation.sort(Sort.by(Sort.Order.asc("pricePerHour")));
+        Aggregation aggregation = Aggregation.newAggregation(match, sort);
+        AggregationResults<Bike> result = mongoTemplate.aggregate(aggregation, "bikes", Bike.class);
+        return result.getMappedResults();
     }
 
     @Override

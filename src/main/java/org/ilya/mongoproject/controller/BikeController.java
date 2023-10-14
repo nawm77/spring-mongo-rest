@@ -3,6 +3,7 @@ package org.ilya.mongoproject.controller;
 import org.ilya.mongoproject.exceptionHandler.ApiException;
 import org.ilya.mongoproject.mapper.BikeMapper;
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
+import org.ilya.mongoproject.model.exception.FilterArgsException;
 import org.ilya.mongoproject.service.BikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,12 @@ public class BikeController {
                     ResponseEntity.status(HttpStatus.FOUND).body(
                             bikeService.findAll().stream()
                                     .map(bikeMapper::toDTO)
-                                    .toList()
-                    )
+                                    .toList())
                     :
                     ResponseEntity.status(HttpStatus.FOUND).body(
                             bikeService.findAllWithLimit(page).stream()
                                     .map(bikeMapper::toDTO)
-                                    .toList()
-                    );
+                                    .toList());
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     ApiException.builder()
@@ -101,6 +100,25 @@ public class BikeController {
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .message(e.getLocalizedMessage())
                     .build()
+            );
+        }
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> getBikeListWithPriceFilter(@RequestParam(name = "startPrice", required = false) Integer startPrice,
+                                                        @RequestParam(name = "endPrice", required = false) Integer endPrice){
+        try {
+            return startPrice == null || endPrice == null ?
+                    ResponseEntity.status(HttpStatus.FOUND).body(
+                            bikeService.findAll().stream().map(bikeMapper::toDTO).toList())
+                    :
+                    ResponseEntity.status(HttpStatus.FOUND).body(
+                            bikeService.findBikeByPriceLimitAndSortDesc(startPrice, endPrice));
+        } catch (FilterArgsException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    ApiException.builder()
+                            .httpStatus(HttpStatus.BAD_REQUEST)
+                            .message(e.getLocalizedMessage())
             );
         }
     }
