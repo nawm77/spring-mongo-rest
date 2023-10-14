@@ -1,6 +1,7 @@
 package org.ilya.mongoproject.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.dto.request.RentRequestDTO;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.ilya.mongoproject.model.entities.Customer;
@@ -45,6 +46,7 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public Rent addNewRent(RentRequestDTO rentRequestDTO) {
+        ObjectId id = ObjectId.get();
         CompletableFuture<Bike> findBikeFuture = CompletableFuture.supplyAsync(() ->
                 bikeService.findById(rentRequestDTO.getBikeId()));
         CompletableFuture<Customer> findCustomerFuture = CompletableFuture.supplyAsync(() ->
@@ -53,7 +55,7 @@ public class RentServiceImpl implements RentService {
         combinedFuture.join();
         Bike foundBike = findBikeFuture.join();
         Customer foundCustomer = findCustomerFuture.join();
-        Rent r = new Rent(rentRequestDTO.getDateTime(), foundBike, foundCustomer);
+        Rent r = new Rent(id.toString(), rentRequestDTO.getDateTime(), foundBike, foundCustomer);
         CompletableFuture.runAsync(() -> rentRepository.save(r));
         return r;
     }
@@ -74,13 +76,20 @@ public class RentServiceImpl implements RentService {
         if (rentRequestDTO.getDateTime() != null){
             existingRent.setDay(rentRequestDTO.getDateTime());
         }
+        CompletableFuture<Bike> getFutureBike = CompletableFuture.supplyAsync(() ->
+                bikeService.findById(rentRequestDTO.getBikeId()));
+        CompletableFuture<Customer> getFutureCustomer = CompletableFuture.supplyAsync(() ->
+                customerService.findByEmail(rentRequestDTO.getEmail()));
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(getFutureCustomer, getFutureCustomer);
+        combinedFuture.join();
         if (rentRequestDTO.getBikeId() != null){
-            existingRent.setBike(bikeService.findById(rentRequestDTO.getBikeId()));
+            existingRent.setBike(getFutureBike.join());
         }
         if (rentRequestDTO.getEmail() != null){
-            existingRent.setCustomer(customerService.findByEmail(rentRequestDTO.getEmail()));
+            existingRent.setCustomer(getFutureCustomer.join());
         }
         log.info("Successfully edited rent" + rentRequestDTO);
+        CompletableFuture.runAsync(() -> rentRepository.save(existingRent));
         return existingRent;
     }
 

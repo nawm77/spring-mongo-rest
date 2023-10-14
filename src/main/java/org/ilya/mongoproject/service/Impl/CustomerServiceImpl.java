@@ -1,6 +1,7 @@
 package org.ilya.mongoproject.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.entities.Customer;
 import org.ilya.mongoproject.repository.CustomerRepository;
 import org.ilya.mongoproject.service.CustomerService;
@@ -49,7 +50,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer addNewCustomer(Customer customer) {
-        return customerRepository.save(customer);
+        customer.setId(ObjectId.get().toString());
+        CompletableFuture.runAsync(() -> customerRepository.save(customer));
+        return customer;
     }
 
     @Override

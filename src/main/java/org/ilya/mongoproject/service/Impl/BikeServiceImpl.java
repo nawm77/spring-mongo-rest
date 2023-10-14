@@ -1,6 +1,7 @@
 package org.ilya.mongoproject.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.ilya.mongoproject.model.dto.request.BikeRequestDTO;
 import org.ilya.mongoproject.model.entities.Bike;
 import org.ilya.mongoproject.repository.BikeRepository;
@@ -38,13 +39,13 @@ public class BikeServiceImpl implements BikeService {
     public Bike addNewBike(BikeRequestDTO bikeDTO) {
         //todo check existing bikes
         Bike b = Bike.builder()
+                .id(ObjectId.get().toString())
                 .owner(bikeDTO.getOwner())
                 .name(bikeDTO.getName())
                 .type(bikeDTO.getType())
                 .pricePerHour(bikeDTO.getPricePerHour())
                 .build();
-        //могу ли я создавать objectid еще до сохранения в монго?
-        log.info("Successfully saved bike " + bikeRepository.save(b));
+        CompletableFuture.runAsync(() -> log.info("Successfully saved bike " + bikeRepository.save(b)));
         return b;
     }
 
