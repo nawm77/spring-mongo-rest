@@ -68,7 +68,7 @@ public class CustomerController {
     @PostMapping("/new")
     public ResponseEntity<?> addNewCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                customerMapper.toDTO(customerMapper.toCustomer(customerRequestDTO))
+                customerMapper.toDTO(customerService.addNewCustomer(customerMapper.toCustomer(customerRequestDTO)))
         );
     }
 
