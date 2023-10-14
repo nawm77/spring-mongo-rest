@@ -32,3 +32,24 @@ spec:
             - containerPort: 8080
               protocol: TCP
               name: sharing-port
+          env:
+            - name: SPRING_DATA_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_name
+                  name: configmapSharing
+            - name: SPRING_DATA_MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_port
+                  name: configmapSharing
+            - name: SPRING_DATA_MONGODB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_host
+                  name: configmapSharing
+            - name: SPRING_DATA_MONGODB_AUTO-INDEX-CREATION
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_auto_index_creation
+                  name: configmapSharing
