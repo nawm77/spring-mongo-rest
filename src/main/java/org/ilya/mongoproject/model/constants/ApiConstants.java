@@ -8,9 +8,11 @@ public class ApiConstants {
     public static final String RENT_PATH = "/rent";
     public static final String BIKE_PATH = "/bike";
     public static final String CUSTOMER_PATH = "/customer";
+    public static final String HEALTH_PATH = "/health";
 
     //Service API
     public static final String RENT_API_V1_PATH = API_V1_PATH + RENT_PATH;
     public static final String BIKE_API_V1_PATH = API_V1_PATH + BIKE_PATH;
     public static final String CUSTOMER_API_V1_PATH = API_V1_PATH + CUSTOMER_PATH;
+    public static final String HEALTH_API_V1_PATH = API_V1_PATH + HEALTH_PATH;
 }

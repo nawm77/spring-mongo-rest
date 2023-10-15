@@ -6,7 +6,7 @@ services:
     ports:
       - '27017:27017'
   sharing:
-    image: bike-sharing-mongo:0.1.0
+    image: bike-sharing-mongo:0.1.1
     build:
       context: .
     container_name: sharing-mongo
