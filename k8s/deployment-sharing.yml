@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: sharing-service
-          image: bike-sharing-mongo:0.1.0
+          image: bike-sharing-mongo:0.2.0
           ports:
             - containerPort: 8080
               protocol: TCP
