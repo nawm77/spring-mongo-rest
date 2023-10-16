@@ -53,3 +53,17 @@ spec:
                 configMapKeyRef:
                   key: db_mongo_auto_index_creation
                   name: configmap-sharing
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/v1/health/
+            initialDelaySeconds: 15
+            failureThreshold: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /api/v1/health/
+            initialDelaySeconds: 60
+            failureThreshold: 0
+            periodSeconds: 15
