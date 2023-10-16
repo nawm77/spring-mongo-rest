@@ -1,6 +1,6 @@
 FROM maven:3.8.3-openjdk-17-slim as Builder
 WORKDIR /build
-COPY . .
+COPY .. .
 RUN mvn clean package -DskipTests
 
 FROM bellsoft/liberica-openjdk-alpine-musl

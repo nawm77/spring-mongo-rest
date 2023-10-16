@@ -1,3 +1,39 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: mongo-deployment
+#  labels:
+#    type: deployment
+#    app: mongo
+#    kind: db
+#spec:
+#  replicas: 1
+#  minReadySeconds: 10
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 1
+#      maxUnavailable: 1
+#    type: RollingUpdate
+#  selector:
+#    matchLabels:
+#      app: mongo
+#      type: container
+#  template:
+#    metadata:
+#      labels:
+#        app: mongo
+#        type: container
+#    spec:
+#      containers:
+#        - name: mongodb
+#          image: mongo:latest
+#          imagePullPolicy: Never
+#          ports:
+#            - containerPort: 27017
+#              protocol: TCP
+#              name: mongo-port
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,6 +44,12 @@ metadata:
     kind: db
 spec:
   replicas: 1
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   selector:
     matchLabels:
       app: mongo
@@ -21,7 +63,15 @@ spec:
       containers:
         - name: mongodb
           image: mongo:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 27017
               protocol: TCP
               name: mongo-port
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc

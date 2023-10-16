@@ -16,5 +16,5 @@ spec:
                 name: mongo-sharing-service
                 port:
                   number: 80
-            pathType: Prefix
             path: /
+            pathType: Prefix

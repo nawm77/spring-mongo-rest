@@ -17,4 +17,3 @@ spec:
       targetPort: sharing-port
       protocol: TCP
       name: sharing-service-port
-      nodePort: 32366
