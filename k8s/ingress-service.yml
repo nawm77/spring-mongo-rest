@@ -6,6 +6,8 @@ metadata:
     type: ingress
     app: sharing-service
     kind: service-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: localhost

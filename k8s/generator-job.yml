@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: generator-job
+  labels:
+    db: mongo
+    app: bikeService
+spec:
+  template:
+    metadata:
+      labels:
+        type: job
+        app: bikeService
+        db: mongo
+    spec:
+      containers:
+        - name: mongo-generation-job
+          image: simple-generator:2.0
+          imagePullPolicy: Never
+          env:
+            - name: DB
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_name
+                  name: configmap-sharing
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_host
+                  name: configmap-sharing
+            - name: HOST_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: db_mongo_port
+                  name: configmap-sharing
+      restartPolicy: Never

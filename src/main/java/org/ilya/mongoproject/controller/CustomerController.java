@@ -35,8 +35,7 @@ public class CustomerController {
                             customerService.findAll().stream()
                                     .map(customerMapper::toDTO)
                                     .toList()
-                    )
-                    :
+                    ):
                     ResponseEntity.status(HttpStatus.FOUND).body(
                             customerService.findAllWithLimit(page).stream()
                                     .map(customerMapper::toDTO)

@@ -20,7 +20,12 @@ import static org.ilya.mongoproject.model.constants.ApiConstants.BIKE_API_V1_PAT
 @Slf4j
 public class BikeController {
     private final BikeService bikeService;
-    private final BikeMapper bikeMapper;
+    private BikeMapper bikeMapper;
+
+    @Autowired
+    public void setBikeMapper(BikeMapper bikeMapper) {
+        this.bikeMapper = bikeMapper;
+    }
 
     @Autowired
     public BikeController(BikeService bikeService, BikeMapper bikeMapper) {

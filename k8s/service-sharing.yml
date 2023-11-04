@@ -8,7 +8,7 @@ metadata:
     db: mongo
     kind: app
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: sharing
     type: container
