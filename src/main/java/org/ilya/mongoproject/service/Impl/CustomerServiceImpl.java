@@ -49,8 +49,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer addNewCustomer(Customer customer) {
-        customer.setId(ObjectId.get().toString());
-        CompletableFuture.runAsync(() -> customerRepository.save(customer));
+        try {
+            Customer existingCustomer = findByEmail(customer.getEmail());
+            throw new IllegalArgumentException("User with email: " + existingCustomer.getEmail() + " already exists");
+        } catch (NoSuchElementException e) {
+            customer.setId(ObjectId.get().toString());
+            CompletableFuture.runAsync(() -> customerRepository.save(customer));
+        }
         return customer;
     }
 

@@ -76,7 +76,6 @@ public class BikeController {
 
     @PostMapping("/new")
     public ResponseEntity<?> addNewBike(@RequestBody BikeRequestDTO bikeRequestDTO){
-        //todo check existing bikes
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 bikeMapper.toDTO(bikeService.addNewBike(bikeRequestDTO))
         );

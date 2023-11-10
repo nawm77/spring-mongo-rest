@@ -8,7 +8,7 @@ metadata:
     db: mongo
     kind: app
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: sharing
     type: container
